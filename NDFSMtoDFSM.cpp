@@ -132,15 +132,15 @@ int accept;
 vector<vector<vector<char>>> edge;
 vector<int> eps;
 vector<int> activeStates;
-vector <int> acceptingStates;
+vector<int> acceptingStates;
 
 void addEdge(char a, char b, char s) {
   edge[getIndex(a)][getIndex(b)].pb(s);
 }
 
-int transformToBits(vector <char> c){
+int transformToBits(vector <char> c) {
   int ret = 0;
-  trav(ch, c){
+  trav(ch, c) {
     BIT_SET(ret, getIndex(ch));
   }
   return ret;
@@ -219,44 +219,44 @@ void transformToDFSM() {
     int act = activeStates[i];
     string state = getStringState(act);
     cout << "Computing " << state << endl;
-    for(int c = 1;c < sz(CH);c++){
+    for (int c = 1; c < sz(CH); c++) {
       vector <int> to;
-      for(int j = 0;j < N;j++) if(BIT_CHECK(act, j)){
-        int curTo = 0;
-        for(int k = 0;k < N;k++){
-          if(count(all(edge[j][k]), CH[c])){
-            BIT_SET(curTo, k);
+      for (int j = 0; j < N; j++) if (BIT_CHECK(act, j)) {
+          int curTo = 0;
+          for (int k = 0; k < N; k++) {
+            if (count(all(edge[j][k]), CH[c])) {
+              BIT_SET(curTo, k);
+            }
           }
+          to.pb(curTo);
         }
-        to.pb(curTo);
-      }
       printf("δ(%s, %c) = eps(", state.c_str(), CH[c]);
       int totalTos = 0;
       string tos = "";
-      if(to.empty()){
+      if (to.empty()) {
         tos = "∅";
-      }else{
+      } else {
         tos = getStringState(to[0]);
         totalTos |= to[0];
-        for(int j = 1;j < sz(to);j++){
+        for (int j = 1; j < sz(to); j++) {
           tos += " ∪ " + getStringState(to[j]);
           totalTos |= to[j];
         }
       }
       int nx = 0;
-      for(int j = 0;j < N;j++) if(BIT_CHECK(totalTos, j)){
-        nx |= eps[j];
-      }
+      for (int j = 0; j < N; j++) if (BIT_CHECK(totalTos, j)) {
+          nx |= eps[j];
+        }
       printf("%s) = eps(%s) = %s\n", tos.c_str(),
-        getStringState(totalTos).c_str(), getStringState(nx).c_str());
-      if(!count(all(activeStates), nx)) activeStates.pb(nx);
+             getStringState(totalTos).c_str(), getStringState(nx).c_str());
+      if (!count(all(activeStates), nx)) activeStates.pb(nx);
     }
   }
   printActiveState();
   printf("Active states tidak bertambah.\n");
   printf("Accepting state = {");
-  trav(cur, activeStates){
-    if(cur&accept) cout << getStringState(cur) << ", ";
+  trav(cur, activeStates) {
+    if (cur & accept) cout << getStringState(cur) << ", ";
   }
   cout << "}\n";
 }

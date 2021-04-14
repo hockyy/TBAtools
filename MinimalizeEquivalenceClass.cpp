@@ -13,8 +13,7 @@ typedef pair<ll, ll> pll;
 #define all(x) begin(x), end(x)
 #define sz(x) (int)(x).size()
 
-namespace utility
-{
+namespace utility {
 
 // Knuth-Morris-Pratt Algorithm, receive a string s and will compute a failure function
 typedef vector<int> vi;
@@ -100,13 +99,13 @@ bool valid(const string &S) {
 }
 
 bool isSame(string a, string b) {
-    trav(kata, isi) if(valid(a + kata) != valid(b + kata)) return 0;
-    return 1;
+  trav(kata, isi) if (valid(a + kata) != valid(b + kata)) return 0;
+  return 1;
 }
 
 string mergeString(string a, string b) {
-    for(auto kata : isi) if(valid(a + kata) != valid(b + kata)) return kata;
-    return "x";
+  for (auto kata : isi) if (valid(a + kata) != valid(b + kata)) return kata;
+  return "x";
 }
 
 // Normalize string
@@ -114,44 +113,44 @@ string normal(string s) { return s == "" ? EMPTY : s; }
 
 int main() {
 
-    isi = utility::kleene(charList, 5);
-    utility::uniquize(isi);
+  isi = utility::kleene(charList, 5);
+  utility::uniquize(isi);
 
-    trav(kata, isi){
-        bool newState = 1;
-        trav(kata2, state) if(isSame(kata, kata2)) {
-            parent[kata] = parent[kata2];
-            newState = 0;
-            break;
-        }
-        if(!newState) continue;
-        parent[kata] = kata;
-        state.pb(kata);
+  trav(kata, isi) {
+    bool newState = 1;
+    trav(kata2, state) if (isSame(kata, kata2)) {
+      parent[kata] = parent[kata2];
+      newState = 0;
+      break;
     }
+    if (!newState) continue;
+    parent[kata] = kata;
+    state.pb(kata);
+  }
 
-    for(auto kata : isi) {
-        cout << normal(kata) << "   ";
-        if(kata == parent[kata]) {
-            printf("Buat [%s]:\n", normal(kata).c_str());
-            for(auto kata2 : state) {
-                if(kata2 == kata) break;
-                printf("distinguishable dengan [%s] karena suffix %s\n",
-                    normal(kata2).c_str(), normal(mergeString(kata, kata2)).c_str());
-            }
-        } else {
-            printf("Gabung [%s], karena indistinguishable dengan %s\n",
-                normal(parent[kata]).c_str(), normal(parent[kata]).c_str());
-        }
-        cout << endl;
-        if(kata == state.back()) break;
-        if(kata.length() > 4) break;
+  for (auto kata : isi) {
+    cout << normal(kata) << "   ";
+    if (kata == parent[kata]) {
+      printf("Buat [%s]:\n", normal(kata).c_str());
+      for (auto kata2 : state) {
+        if (kata2 == kata) break;
+        printf("distinguishable dengan [%s] karena suffix %s\n",
+               normal(kata2).c_str(), normal(mergeString(kata, kata2)).c_str());
+      }
+    } else {
+      printf("Gabung [%s], karena indistinguishable dengan %s\n",
+             normal(parent[kata]).c_str(), normal(parent[kata]).c_str());
     }
-    for(auto st : state) {
-        for(auto ch : charList)
-            cout << normal(st) << " :" << ch << " = " << normal(parent[st + ch]) << "\n";
-    }
-    cout << "Final : \n";
-    for(auto st : state)
-        if(valid(st))
-            cout << normal(st) << "\n";
+    cout << endl;
+    if (kata == state.back()) break;
+    if (kata.length() > 4) break;
+  }
+  for (auto st : state) {
+    for (auto ch : charList)
+      cout << normal(st) << " :" << ch << " = " << normal(parent[st + ch]) << "\n";
+  }
+  cout << "Final : \n";
+  for (auto st : state)
+    if (valid(st))
+      cout << normal(st) << "\n";
 }
