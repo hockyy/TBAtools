@@ -123,19 +123,18 @@ void uniquize(vector <T> &V) {
 
 using namespace utility;
 
-const vector <char> CH = {EMPTY, 'a', 'b'};
-const int N = 6;
+const vector <char> CH = {'a', 'b'};
+const int N = 7;
 const int initial = 0;
+const int ALL = (1 << N) - 1;
 
-namespace NDFSM {
+namespace DFSM {
 int accept;
-vector<vector<vector<char>>> edge;
-vector<int> eps;
-vector<int> activeStates;
-vector<int> acceptingStates;
+vector<vector<int>> edge;
+vector<int> partition;
 
 void addEdge(char a, char b, char s) {
-  edge[getIndex(a)][getIndex(b)].pb(s);
+  edge[getIndex(a)][s - 'a'] = getIndex(b);
 }
 
 int transformToBits(vector <char> c) {
@@ -147,133 +146,118 @@ int transformToBits(vector <char> c) {
 }
 
 void makeEdge() {
-  edge.resize(N, vector<vector<char>>(N));
-  eps.resize(N);
-  accept = transformToBits({'C'});
-  addEdge('A', 'B', 'b');
-  addEdge('A', 'E', EMPTY);
-  addEdge('B', 'C', 'a');
-  addEdge('C', 'D', 'b');
-  addEdge('D', 'A', EMPTY);
+  edge.resize(N, vector<int>(sz(CH)));
+  accept = transformToBits({'B', 'F'});
+  addEdge('A', 'B', 'a');
+  addEdge('A', 'E', 'b');
+  addEdge('B', 'D', 'a');
+  addEdge('B', 'C', 'b');
+  addEdge('C', 'B', 'a');
+  addEdge('C', 'E', 'b');
+  addEdge('D', 'D', 'a');
+  addEdge('D', 'G', 'b');
   addEdge('E', 'F', 'a');
-  addEdge('F', 'C', EMPTY);
-
+  addEdge('E', 'G', 'b');
+  addEdge('F', 'G', 'a');
+  addEdge('F', 'C', 'b');
+  addEdge('G', 'D', 'a');
+  addEdge('G', 'G', 'b');
 }
 
-void getEPS() {
-
-  printf("Printing q Eps(q)\n");
-
-  for (int i = 0; i < N; i++) {
-    BIT_SET(eps[i], i);
-    for (int j = 0; j < N; j++) {
-      if (count(all(edge[i][j]), EMPTY)) {
-        BIT_SET(eps[i], j);
-      }
-    }
-  }
-
-  for (int iter = 0; iter < N; iter++) {
-    for (int i = 0; i < N; i++) {
-      for (int j = 0; j < N; j++) {
-        if (BIT_CHECK(eps[i], j)) {
-          eps[i] |= eps[j];
-        }
-      }
-    }
-  }
-
-  for (int i = 0; i < N; i++) {
-    cout << makeChar(i) << ":";
-    for (int j = 0; j < N; j++) {
-      if (BIT_CHECK(eps[i], j))
-        cout << " " << makeChar(j);
-    }
-    cout << endl;
-  }
-
-}
 
 string getStringState(int s) {
   string res = "";
-  for (int j = 0; j < N; j++) {
-    if (BIT_CHECK(s, j)) res += makeChar(j);
-  }
-  if (res == "") res = "∅";
-  return res;
-}
-
-void printActiveState() {
-  cout << "Active states = {";
-  for(int i = 0;i < sz(activeStates);i++){
-    int cur = activeStates[i];
-    cout << getStringState(cur);
-    if(i != sz(activeStates) - 1) cout << ", ";
-  }
-  cout << "}" << endl;
-}
-
-void transformToDFSM() {
-  // Push active states
-  activeStates.pb(eps[initial]);
-  for (int i = 0; i < sz(activeStates); i++) {
-    cout << endl;
-    printActiveState();
-    int act = activeStates[i];
-    string state = getStringState(act);
-    cout << "Computing " << state << endl;
-    for (int c = 1; c < sz(CH); c++) {
-      vector <int> to;
-      for (int j = 0; j < N; j++) if (BIT_CHECK(act, j)) {
-          int curTo = 0;
-          for (int k = 0; k < N; k++) {
-            if (count(all(edge[j][k]), CH[c])) {
-              BIT_SET(curTo, k);
-            }
-          }
-          to.pb(curTo);
-        }
-      printf("δ(%s, %c) = eps(", state.c_str(), CH[c]);
-      int totalTos = 0;
-      string tos = "";
-      if (to.empty()) {
-        tos = "∅";
-      } else {
-        tos = getStringState(to[0]);
-        totalTos |= to[0];
-        for (int j = 1; j < sz(to); j++) {
-          tos += " ∪ " + getStringState(to[j]);
-          totalTos |= to[j];
-        }
-      }
-      int nx = 0;
-      for (int j = 0; j < N; j++) if (BIT_CHECK(totalTos, j)) {
-          nx |= eps[j];
-        }
-      printf("%s) = eps(%s) = %s\n", tos.c_str(),
-             getStringState(totalTos).c_str(), getStringState(nx).c_str());
-      if (!count(all(activeStates), nx)) activeStates.pb(nx);
-    }
-  }
-  printActiveState();
-  printf("Active states tidak bertambah.\n");
-  printf("Accepting state = {");
   bool first = 1;
-  trav(cur, activeStates) {
-    if (cur & accept){
-      if(!first) cout << ", ";
-      cout << getStringState(cur);
+  for (int j = 0; j < N; j++) {
+    if (BIT_CHECK(s, j)){
+      if(!first) res += ", ";
+      res += makeChar(j);
       first = 0;
     }
   }
-  cout << "}\n\n";
+  if (res == "") res = "∅";
+  return "{" + res + "}";
 }
+
+void printPartition() {
+  cout << "Partisi = ";
+  for(int i = 0;i < sz(partition);i++){
+    int cur = partition[i];
+    cout << getStringState(cur);
+    if(i != sz(partition) - 1) cout << ", ";
+  }
+  cout << "" << endl;
+}
+
+void minimalizeDFSM() {
+  partition.pb(accept);
+  partition.pb(ALL^accept);
+  int deleteIdx;
+  do{
+    printPartition();
+    vector <int> idxPartition(N);
+    for(int j = 0;j < sz(partition);j++){
+      for(int i = 0;i < N;i++){
+        if(BIT_CHECK(partition[j], i))
+          idxPartition[i] = j;
+      }
+    }
+    vector <string> changes;
+    deleteIdx = -1;
+    vector <int> newPartition;
+    for(int p = 0;p < sz(partition);p++){
+      for(int i = 0;i < sz(CH);i++){
+        map <int, int> newTo;
+        int part = partition[p];
+        // Try to use this character
+        for(int j = 0;j < N;j++) if(BIT_CHECK(part, j)){
+          BIT_SET(newTo[idxPartition[edge[j][i]]], j);
+        }
+        if(newTo.size() == 1) continue;
+        cout << endl;
+        printf("// Partition happening\n");
+        for(int j = 0;j < N;j++) if(BIT_CHECK(part, j)){
+          printf("δ(%c, %c) = %c\n", makeChar(j), CH[i], makeChar(edge[j][i]));
+        }
+        for (auto to : newTo) {
+          printf("%s akan bertransisi ke partisi %s\n",
+            getStringState(to.se).c_str(),
+            getStringState(partition[to.fi]).c_str());
+        }
+        cout << endl;
+        printf("%s akan dipartisi menjadi:", getStringState(part).c_str());
+        bool first = 1;
+        for(auto to : newTo){
+          if(!first) printf(", ");
+          cout << getStringState(to.se);
+          newPartition.pb(to.se);
+          first = 0;
+        }
+        printf("\n");
+        deleteIdx = p;
+        break;
+      }
+    }
+    if(deleteIdx == -1) break;
+    vector <int> nextPartition;
+    for(int p = 0;p < sz(partition);p++){
+      if(p != deleteIdx){
+        nextPartition.pb(partition[p]);
+      }else{
+        trav(part, newPartition){
+          nextPartition.pb(part);
+        }
+      }
+    }
+    swap(nextPartition, partition);
+  }while(deleteIdx != -1);
+}
+
 
 }
 
 int main() {
-  NDFSM::makeEdge();
-  NDFSM::getEPS();
-  NDFSM::transformToDFSM();
+  DFSM::makeEdge();
+  DFSM::minimalizeDFSM();
   return 0;
 }

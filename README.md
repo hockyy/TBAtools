@@ -1,6 +1,6 @@
 # Theory of Computation Tools
 
-### FSM to Regex
+## FSM to Regex
 
 Use `regex.cpp`.
 
@@ -70,3 +70,6 @@ print
 ((F, ε), A)
 ```
 
+## StringGenerator
+
+This will generate the first `CNTOUT`-th string, `uniquize` will remove all `uniquize` 
