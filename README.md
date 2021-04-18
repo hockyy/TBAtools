@@ -1,5 +1,12 @@
 # Theory of Computation Tools
 
+Credits:
+
+- Fausta
+- Hocky
+
+### Table of Contents
+
 <!-- MarkdownTOC -->
 
 - [1A. Top 10 Proper Order](#1a-top-10-proper-order)
@@ -19,7 +26,6 @@
 - [6C. CFG -> Chomsky](#6c-cfg---chomsky)
 
 <!-- /MarkdownTOC -->
-
 
 ### 1A. Top 10 Proper Order
 
@@ -48,15 +54,150 @@ Cara pakai:
 - <img src="README.assets/image-20210418174150693.png" alt="image-20210418174150693" style="zoom:33%;" />
 - Jangan lupa mengecek JFF menggunakan text editor, apakah matches nya ada banyak karakter * banyak state dan pastikan kalau dia DFSM. **Jangan lupa menambahkan transisi dari dead state ke dead state juga.**
 
-### [2B. Membuat NDFSM](./2B.cpp)
-### [3A. NDFSM -> DFSM](./3A.cpp)
-### [3B. Minimalisasi DFSM](./3B.cpp)
-### [3C. Kelas Ekivalen](./3C.cpp)
-### [4A. Membuat Regex](./4A.cpp)
-### [4B. Regex -> NDFSM](.4B.cpp)
-### [4C. FSM -> Regex](./4C.cpp)
-### [4D. Membuat DFSM dari gabungan beberapa mesin](./4D.cpp)
-### [5A. Pumping](./5A.cpp)
-### [6A. Regular Grammar](./6A.cpp)
-### [6B. CFG](./6A.cpp)
-### [6C. CFG -> Chomsky](./6C.cpp)
+### 2B. Membuat NDFSM
+
+Coba-coba aja sendiri, baca-baca latihan
+
+### 3A. NDFSM -> DFSM
+
+[Program 3A](./Kode/3A.cpp)
+
+Tinggal modif aja `void makeEdge()`, terus dia bakal otomatis ngerubah. Ini cuma buat essay ya! Kalau mau JFF tinggal pake JFLAP langsung.
+
+### 3B. Minimalisasi DFSM
+
+[Program 3B](./Kode/3B.cpp)
+
+Tinggal modif aja `void makeEdge()`, terus dia bakal otomatis ngerubah. Ini cuma buat essay ya! Kalau mau JFF tinggal pake JFLAP langsung.
+
+### 3C. Kelas Ekivalen
+
+[Program 3C Fausta](./Kode/3C.cpp)
+
+[Program 3C Hocky](./Kode/3Cv2.cpp)
+
+Refer ke 2A, penggunaannya sama.
+
+### 4A. Membuat Regex
+
+Pikirin dulu benar-benar langsung aja buat regexnya. Kalau udh stuck banget baru:
+
+- Pake program 2A, terus bikin FSMnya, terus bisa convert
+
+![image-20210418180303800](README.assets/image-20210418180303800.png)
+
+### 4B. Regex -> NDFSM
+
+Sama aja pake JFLAP.
+
+### 4C. FSM -> Regex
+
+[Program 4C Hocky](./Kode/4C.cpp)
+
+Use `regex.cpp`. Modify:
+
+```c++
+void makeEdges();
+```
+
+Here is the sample interaction. You can enter each query as `rip <Node>` or `print`, don't rip the last nodes. Please make sure the automata you build at first is already prenormalized with:
+
+- No-self loop Initial Node
+- Only one accepting nodes
+
+**First input**
+
+```
+rip D
+```
+```
+Ripping D
+Old Affected Transitions: 
+Self loop: ((D, a+b), D)
+((B, a), D)
+((D, b), C)
+((D, ε), G)
+New Transitions: 
+((B, a(a+b)*b), C)
+((B, a(a+b)*), G)
+```
+**Second input**
+
+```
+print
+```
+```
+((A, b), A)
+((A, ε), B)
+((A, ε), C)
+((B, a), B)
+((B, a(a+b)*b), C)
+((B, a(a+b)*), G)
+((C, b), C)
+((C, a), E)
+((E, ε), C)
+((E, ε), G)
+((F, ε), A)
+```
+
+### 4D. Membuat DFSM dari gabungan beberapa mesin
+
+- A - B = A ∩ B<sup>c</sup> =  (A<sup>c</sup> ∪ B)<sup>c</sup>
+- A ∩ B = (A<sup>c</sup> ∪ B<sup>c</sup>)<sup>c</sup>
+
+Cara bikin A ∪ B:
+
+- Pertama tambahin satu node Initial, terus dari dua mesin itu inisial yang baru dibikin dihubungin pake ε ke inisial mesin A, sama mesin B
+
+Cara bikin A<sup>c</sup>:
+
+- Convert ke DFSM
+- Minimalize DFSM
+- **PASTIKAN BENAR BENAR LENGKAP DFSM-NYA!** Semua karakter harus ada, semua transisi harus ada untuk semua karakter.
+- Swap final dan non-final
+
+Cara bikin concat(A, B):
+
+- Bikin initial B yang baru, bikin ending nodes satu yang baru dari A, gabungin A -> B, hapus tanda final nodes dari A.
+
+Cara bikin A<sup>R</sup>:
+
+- Convert ke DFSM
+- **PASTIKAN BENAR BENAR LENGKAP DFSM-NYA!** Semua karakter harus ada, semua transisi harus ada untuk semua karakter.
+- Accepting harus satu, kalau lebih dari satu finalnya bikin node baru.
+- Initial jadi accepting, accepting jadi initial
+- Hasilnya bisa jadi NDFSM
+- Convert lagi ke DFSM bila perlu.
+
+Referensi:
+
+- https://www.youtube.com/watch?v=em-lZgQeDlI
+- https://www.geeksforgeeks.org/reversal-process-in-dfa/
+
+### 5A. Pumping
+
+Misalkan sebuah pumping length $k$, pilih sebuah string $w$, yang panjangnya $\geq k$, biasanya panjangnya ada variabel $k$-nya. Partisi $w$ jadi $xyz$, dengan $|xy| \leq k$ dan $|y| \geq 1$, pilih sembarang $q$ sehingga $xy^qz \notin L$. $q$ biasanya $1, 2,$ atau $k$.
+
+Referensi:
+
+- https://www.youtube.com/watch?v=I3FuVKVgLCA
+
+### 6A. Regular Grammar
+
+[Program 6A](./Kode/6A.cpp)
+
+Refer ke 2A, penggunaannya sama.
+
+### 6B. CFG
+
+Baca latihan-latihan.
+
+### 6C. CFG -> Chomsky
+
+Pake JFLAP
+
+<img src="README.assets/image-20210418182728614.png" alt="image-20210418182728614" style="zoom: 50%;" />
+
+Untuk tambahan silakan baca [CFGtoNormalForm](./HW/HW2106/CFGtoNormalForm.pdf).
+
+![HW2106](README.assets/HW2106.jpg)
