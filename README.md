@@ -1,6 +1,25 @@
 # Theory of Computation Tools
 
-[TOC]
+<!-- MarkdownTOC -->
+
+- [1A. Top 10 Proper Order](#1a-top-10-proper-order)
+- [1B. Pembuktian](#1b-pembuktian)
+- [2A. Membuat DFSM](#2a-membuat-dfsm)
+- [2B. Membuat NDFSM](#2b-membuat-ndfsm)
+- [3A. NDFSM -> DFSM](#3a-ndfsm---dfsm)
+- [3B. Minimalisasi DFSM](#3b-minimalisasi-dfsm)
+- [3C. Kelas Ekivalen](#3c-kelas-ekivalen)
+- [4A. Membuat Regex](#4a-membuat-regex)
+- [4B. Regex -> NDFSM](#4b-regex---ndfsm)
+- [4C. FSM -> Regex](#4c-fsm---regex)
+- [4D. Membuat DFSM dari gabungan beberapa mesin](#4d-membuat-dfsm-dari-gabungan-beberapa-mesin)
+- [5A. Pumping](#5a-pumping)
+- [6A. Regular Grammar](#6a-regular-grammar)
+- [6B. CFG](#6b-cfg)
+- [6C. CFG -> Chomsky](#6c-cfg---chomsky)
+
+<!-- /MarkdownTOC -->
+
 
 ### 1A. Top 10 Proper Order
 
