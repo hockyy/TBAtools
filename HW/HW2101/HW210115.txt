@@ -1,0 +1,10 @@
+^
+abb
+abbb
+aabbbb
+aabbbbb
+aabbbbbb
+aaabbbbbb
+aaabbbbbbb
+aaabbbbbbbb
+aaaabbbbbbbb

@@ -1,0 +1,10 @@
+^
+c
+bc
+cb
+cc
+abc
+acb
+bac
+bbc
+bca

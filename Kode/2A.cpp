@@ -25,9 +25,13 @@ ll harus(string s, string a, string b) // Setiap kemunculan a harus segera diiku
     ll sz = s.length();
     ll az = a.length();
     ll bz = b.length();
-    for(ll i = 0; i + az - 1 < sz; i++)
-        if(s.substr(i, az) == a)
+    for(ll i = 0; i + az - 1 < sz; i++){
+        if(s.substr(i, az) == a){
             if((i + az + bz - 1 >= sz) || (s.substr(i + az, bz) != b))return 0;
+            // WARNING: HIDUPKAN KALAU NON-OVERLAP!
+            i += az + bz - 1;
+        }
+    }
     return 1;
 }
 string rev(string s) // S^R
@@ -72,13 +76,13 @@ ll substringNonOverlap(string s, string a)
 }
 ll cek(string s) // Cek
 {
-    ll sz = s.length();
+    // ll sz = s.length();
 
     // return (substringNonOverlap(s, "abca"));
-    // return harus(s, "a", "bb");
+    return harus(s, "aa", "ba");
     // return (cnt(s, 'a') == cnt(s, 'b'));
     // return (pref(s, "101") == 1 && suff(s, "1100") == 0);
-    return (suff(s, "101") == 0 && suff(s, "1100") == 0);
+    // return (suff(s, "101") == 0 && suff(s, "1100") == 0);
 }
 void rek(string s)
 {
@@ -116,13 +120,17 @@ string ct(string s)
 int main()
 {
     // ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
-    w = {'0', '1'};
-    k = w.size();
+    // w = {'0', '1'};
+    w = {'a', 'b'};
     mx = 10;
+    // w = {'a', 'b', 'c'};
+    // mx = 7;
+    k = w.size();
     rek("");
     sort(isi.begin(), isi.end(), cmp);
     for(auto kata : isi)
     {
+        cout << "Computing " << kata << endl;
         ll baru = 1;
         for(auto kata2 : state)
             if(sama(kata, kata2))
@@ -146,11 +154,17 @@ int main()
         if(cek(st))cout << ")";
     }
     cout << "}\n";
+    map <string, int> idxState;
+    int cnt = 0;
+    for(auto st : state){
+        idxState[st] = ++cnt;
+    }
     for(auto st : state)
     {
         for(auto ch : w)
         {
-            cout << "[" << ct(st) << "] " << ch << " [" << ct(p[st + ch]) << "]\n";
+            printf("δ((%d)[%s], '%c') -> (%d)[%s]\n",
+                idxState[st], ct(st).c_str(), ch, idxState[p[st + ch]], ct(p[st + ch]).c_str());
             // cout << ct(st) << " :" << ch << " = " << ct(p[st + ch]) << "\n"; 
         }
     }
