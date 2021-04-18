@@ -1,5 +1,21 @@
 # Theory of Computation Tools
 
+### [1A. Top 10 Proper Order](./1A.cpp)
+### [1B. Pembuktian](./1B.cpp)
+### [2A. Membuat DFSM](./2A.cpp)
+### [2B. Membuat NDFSM](./2B.cpp)
+### [3A. NDFSM -> DFSM](./3A.cpp)
+### [3B. Minimalisasi DFSM](./3B.cpp)
+### [3C. Kelas Ekivalen](./3C.cpp)
+### [4A. Membuat Regex](./4A.cpp)
+### [4B. Regex -> NDFSM](.4B.cpp)
+### [4C. FSM -> Regex](./4C.cpp)
+### [4D. Membuat DFSM dari gabungan beberapa mesin](./4D.cpp)
+### [5A. Pumping](./5A.cpp)
+### [6A. Regular Grammar](./6A.cpp)
+### [6B. CFG](./6A.cpp)
+### [6C. CFG -> Chomsky](./6C.cpp)
+
 ## FSM to Regex
 
 Use `regex.cpp`.
