@@ -124,7 +124,7 @@ void uniquize(vector <T> &V) {
 using namespace utility;
 
 const vector <char> CH = {'a', 'b'};
-const int N = 7;
+const int N = 10;
 const int initial = 0;
 const int ALL = (1 << N) - 1;
 
@@ -147,21 +147,27 @@ int transformToBits(vector <char> c) {
 
 void makeEdge() {
   edge.resize(N, vector<int>(sz(CH)));
-  accept = transformToBits({'B', 'F'});
+  accept = transformToBits({'C', 'E', 'H'});
   addEdge('A', 'B', 'a');
-  addEdge('A', 'E', 'b');
-  addEdge('B', 'D', 'a');
+  addEdge('A', 'F', 'b');
+  addEdge('B', 'B', 'a');
   addEdge('B', 'C', 'b');
-  addEdge('C', 'B', 'a');
-  addEdge('C', 'E', 'b');
-  addEdge('D', 'D', 'a');
-  addEdge('D', 'G', 'b');
-  addEdge('E', 'F', 'a');
-  addEdge('E', 'G', 'b');
+  addEdge('C', 'A', 'a');
+  addEdge('C', 'F', 'b');
+  addEdge('D', 'B', 'a');
+  addEdge('D', 'E', 'b');
+  addEdge('E', 'J', 'a');
+  addEdge('E', 'C', 'b');
   addEdge('F', 'G', 'a');
-  addEdge('F', 'C', 'b');
-  addEdge('G', 'D', 'a');
-  addEdge('G', 'G', 'b');
+  addEdge('F', 'F', 'b');
+  addEdge('G', 'I', 'a');
+  addEdge('G', 'H', 'b');
+  addEdge('H', 'J', 'a');
+  addEdge('H', 'F', 'b');
+  addEdge('I', 'I', 'a');
+  addEdge('I', 'C', 'b');
+  addEdge('J', 'I', 'a');
+  addEdge('J', 'E', 'b');
 }
 
 
@@ -219,11 +225,13 @@ void minimalizeDFSM() {
         for(int j = 0;j < N;j++) if(BIT_CHECK(part, j)){
           printf("δ(%c, %c) = %c\n", makeChar(j), CH[i], makeChar(edge[j][i]));
         }
+        fflush(stdout);
         for (auto to : newTo) {
           printf("%s akan bertransisi ke partisi %s\n",
             getStringState(to.se).c_str(),
             getStringState(partition[to.fi]).c_str());
         }
+        fflush(stdout);
         cout << endl;
         printf("%s akan dipartisi menjadi:", getStringState(part).c_str());
         bool first = 1;
@@ -252,13 +260,58 @@ void minimalizeDFSM() {
     }
     swap(nextPartition, partition);
   }while(deleteIdx != -1);
+  printPartition();
+  fflush(stdout);
+
 }
 
+void finalPrints(){
+  vector <int> idxPartition(N);
+  for(int j = 0;j < sz(partition);j++){
+    for(int i = 0;i < N;i++){
+      if(BIT_CHECK(partition[j], i))
+        idxPartition[i] = j;
+    }
+  }
 
+  for(int p = 0;p < sz(partition);p++){
+    for(int i = 0;i < sz(CH);i++){
+      map <int, int> newTo;
+      int part = partition[p];
+      // Try to use this character
+      for(int j = 0;j < N;j++) if(BIT_CHECK(part, j)){
+        BIT_SET(newTo[idxPartition[edge[j][i]]], j);
+      }
+      assert(newTo.size() == 1);
+      auto to = *newTo.begin();
+      for(int j = 0;j < N;j++) if(BIT_CHECK(part, j)){
+        printf("δ(%s, %c) = %s\n", getStringState(to.se).c_str(), CH[i], getStringState(partition[to.fi]).c_str());
+      }
+    }
+  }
+  fflush(stdout);
+  cout << "Initial state: ";
+  for(int p = 0;p < sz(partition);p++){
+    if(BIT_CHECK(partition[p], initial)){
+      cout << getStringState(partition[p]) << endl;
+    }
+  }
+  cout << "Accepting state: ";
+  bool first = 1;
+  for(int p = 0;p < sz(partition);p++){
+    if(partition[p]&accept){
+      if(!first) cout << ", ";
+      cout << getStringState(partition[p]);
+      first = 0;
+    }
+  }
+  cout << endl;
+}
 }
 
 int main() {
   DFSM::makeEdge();
   DFSM::minimalizeDFSM();
+  DFSM::finalPrints();
   return 0;
 }
