@@ -237,6 +237,7 @@ void minimalizeDFSM() {
         deleteIdx = p;
         break;
       }
+      if(deleteIdx != -1) break;
     }
     if(deleteIdx == -1) break;
     vector <int> nextPartition;
