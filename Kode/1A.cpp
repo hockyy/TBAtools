@@ -75,19 +75,20 @@ vector <string> kleene(const vector <string> &A, int expo, bool isStar = 1) {
   for (int i = 1; i <= expo; i++) {
     base = concat(A, base);
     res.insert(res.end(), all(base));
+    uniquize(res);
   }
-  uniquize(res);
   return res;
 }
 
 bool isValid(const string &S) {
+  return 1;
   // return 1;
   // return 1;
   // return sz(match(S, "aaa")) == 1;
   // L1 = {w {a, b}* : (4#a(w) < 2#b(w) - 4 )  (|w| ≥ 5)}
-  map <char, int> cnt;
-  trav(cur, S) cnt[cur]++;
-  return (2 * cnt['a'] < cnt['b'] - 2) && S.length() > 5;
+  // map <char, int> cnt;
+  // trav(cur, S) cnt[cur]++;
+  // return (2 * cnt['a'] < cnt['b'] - 2) && S.length() > 5;
   // return cnt['a'] >= cnt['b'];
   // return cnt['a'] && cnt['b'] && 2 * cnt['a'] <= cnt['b'] && cnt['b'] <= 3 * cnt['a'];
 
@@ -116,7 +117,23 @@ bool eachPrefix(const string &S) {
   return 1;
 }
 
+vector <string> intersection(const vector<string> &L1, const vector<string> &L2, bool isSubtract = 0){
+  vector <string> ret;
+  set <string> tmp(all(L2));
+  trav(S, L1) if(isSubtract^tmp.count(S)) ret.pb(S);
+  return ret;
+}
+
 int main() {
+
+  vector <string> L2 = {"ca", "c"};
+  vector <string> L3 = {"", "aaa", "cb", "ba", "bbbb"};
+  vector <string> L4 = {"ca", "cb"};
+
+  // vector <string> L1 = concat(L4, L3);
+  vector <string> L5 = concat(kleene(L2, STAR),
+    kleene(intersection(L2, concat(L4, L3)), STAR));
+
   // vector <string> L1 = {"a", "ab", "ca", "cc"};
   // vector <string> L2 = {"", "aa", "cb"};
   // vector <string> L3 = {};
@@ -129,7 +146,7 @@ int main() {
   // trav(cur, A) if(specialValid(cur, "aaa")) isi.pb(cur);
   // }
   // vector <string> B = A;
-  vector <string> isi = kleene({"a", "b"}, STAR);
+  vector <string> isi = L5;
   // vector <string> B = kleene({"b"}, 12);
   // vector <string> isi = concat2(A, B);
   // vector <string> isi = L2;
