@@ -64,20 +64,31 @@ vector <string> concat2(const vector<string> &A, const vector<string> &B) {
   return res;
 }
 
-// Do start = isStar ⊕ 1, end = expo
-// power(A, start) ∪ power(A, start + 1) ∪ … ∪ power(A, end - 1) ∪ power(A, end)
+vector <string> power(const vector <string> &A, int expo){
+  vector <string> base(1);
+  for (int i = 1; i <= expo; i++) base = concat(A, base);
+  return base;
+}
 
-vector <string> kleene(const vector <string> &A, int expo, bool isStar = 1) {
-  vector <string> base = {""};
-  vector <string> res = {};
-  if (isStar) res.pb("");
-  res.insert(res.end(), all(base));
-  for (int i = 1; i <= expo; i++) {
+// res = power(A, start) ∪ power(A, start + 1) ∪ … ∪ power(A, end - 1) ∪ power(A, end)
+
+vector <string> kleene(const vector <string> &A, int st, int ed) {
+  vector <string> base = power(A, st);
+  vector <string> res = base;
+  for (int i = st + 1; i <= ed; i++) {
     base = concat(A, base);
     res.insert(res.end(), all(base));
     uniquize(res);
   }
   return res;
+}
+
+vector <string> kleeneStar(const vector <string> &A){
+  return kleene(A, 0, STAR);
+}
+
+vector <string> kleenePlus(const vector <string> &A){
+  return kleene(A, 1, STAR);
 }
 
 bool isValid(const string &S) {
@@ -127,12 +138,12 @@ vector <string> intersection(const vector<string> &L1, const vector<string> &L2,
 int main() {
 
   vector <string> L2 = {"ca", "c"};
-  vector <string> L3 = {"", "aaa", "cb", "ba", "bbbb"};
-  vector <string> L4 = {"ca", "cb"};
+  // vector <string> L3 = {"", "aaa", "cb", "ba", "bbbb"};
+  // vector <string> L4 = {"ca", "cb"};
 
   // vector <string> L1 = concat(L4, L3);
-  vector <string> L5 = concat(kleene(L2, STAR),
-    kleene(intersection(L2, concat(L4, L3)), STAR));
+  // vector <string> L5 = concat(kleene(L2, STAR),
+  //   kleene(intersection(L2, concat(L4, L3)), STAR));
 
   // vector <string> L1 = {"a", "ab", "ca", "cc"};
   // vector <string> L2 = {"", "aa", "cb"};
@@ -146,7 +157,10 @@ int main() {
   // trav(cur, A) if(specialValid(cur, "aaa")) isi.pb(cur);
   // }
   // vector <string> B = A;
-  vector <string> isi = L5;
+  vector <string> isi = kleenePlus(L2);
+  isi = kleeneStar(L2);
+  isi = kleene(L2, 2, 2);
+
   // vector <string> B = kleene({"b"}, 12);
   // vector <string> isi = concat2(A, B);
   // vector <string> isi = L2;

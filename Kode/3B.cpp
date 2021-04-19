@@ -284,9 +284,7 @@ void finalPrints(){
       }
       assert(newTo.size() == 1);
       auto to = *newTo.begin();
-      for(int j = 0;j < N;j++) if(BIT_CHECK(part, j)){
-        printf("δ(%s, %c) = %s\n", getStringState(to.se).c_str(), CH[i], getStringState(partition[to.fi]).c_str());
-      }
+      printf("δ(%s, %c) = %s\n", getStringState(to.se).c_str(), CH[i], getStringState(partition[to.fi]).c_str());
     }
   }
   fflush(stdout);
