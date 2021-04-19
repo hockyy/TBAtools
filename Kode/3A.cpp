@@ -124,7 +124,7 @@ void uniquize(vector <T> &V) {
 using namespace utility;
 
 const vector <char> CH = {EMPTY, 'a', 'b'};
-const int N = 6;
+const int N = 4;
 const int initial = 0;
 
 namespace NDFSM {
@@ -149,14 +149,22 @@ int transformToBits(vector <char> c) {
 void makeEdge() {
   edge.resize(N, vector<vector<char>>(N));
   eps.resize(N);
-  accept = transformToBits({'C'});
-  addEdge('A', 'B', 'b');
-  addEdge('A', 'E', EMPTY);
+
+  accept = transformToBits({'D'});
+  addEdge('A', 'B', EMPTY);
+  addEdge('A', 'A', 'a');
   addEdge('B', 'C', 'a');
-  addEdge('C', 'D', 'b');
-  addEdge('D', 'A', EMPTY);
-  addEdge('E', 'F', 'a');
-  addEdge('F', 'C', EMPTY);
+  addEdge('C', 'B', 'b');
+  addEdge('B', 'D', EMPTY);
+  addEdge('D', 'D', 'a');
+  // accept = transformToBits({'C'});
+  // addEdge('A', 'B', 'b');
+  // addEdge('A', 'E', EMPTY);
+  // addEdge('B', 'C', 'a');
+  // addEdge('C', 'D', 'b');
+  // addEdge('D', 'A', EMPTY);
+  // addEdge('E', 'F', 'a');
+  // addEdge('F', 'C', EMPTY);
 
 }
 

@@ -28,19 +28,26 @@ void makeEdges() {
       edges[i][j] = NONE;
     }
   }
-  addEdge('A', 'A', "b");
-  addEdge('A', 'C', EMPTY);
   addEdge('A', 'B', EMPTY);
-  addEdge('B', 'B', "a");
-  addEdge('B', 'D', "a");
-  addEdge('C', 'C', "b");
-  addEdge('C', 'E', "a");
-  addEdge('D', 'C', "b");
-  addEdge('D', 'G', EMPTY);
-  addEdge('D', 'D', "a+b");
-  addEdge('E', 'C', EMPTY);
-  addEdge('E', 'G', EMPTY);
-  addEdge('F', 'A', EMPTY);
+  addEdge('A', 'A', "a");
+  addEdge('B', 'C', "a");
+  addEdge('C', 'B', "b");
+  addEdge('B', 'D', EMPTY);
+  addEdge('D', 'D', "a");
+  addEdge('D', 'E', EMPTY);
+  // addEdge('A', 'A', "b");
+  // addEdge('A', 'C', EMPTY);
+  // addEdge('A', 'B', EMPTY);
+  // addEdge('B', 'B', "a");
+  // addEdge('B', 'D', "a");
+  // addEdge('C', 'C', "b");
+  // addEdge('C', 'E', "a");
+  // addEdge('D', 'C', "b");
+  // addEdge('D', 'G', EMPTY);
+  // addEdge('D', 'D', "a+b");
+  // addEdge('E', 'C', EMPTY);
+  // addEdge('E', 'G', EMPTY);
+  // addEdge('F', 'A', EMPTY);
 }
 
 

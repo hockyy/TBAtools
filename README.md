@@ -169,6 +169,10 @@ Cara bikin A<sup>R</sup>:
 - Hasilnya bisa jadi NDFSM
 - Convert lagi ke DFSM bila perlu.
 
+Cara bikin A<sup>*</sup>:
+
+- Bikin satu initial state, untuk setiap accepting state bikin transisi ε ke initial.
+
 Referensi:
 
 - https://www.youtube.com/watch?v=em-lZgQeDlI
@@ -199,5 +203,12 @@ Pake JFLAP
 <img src="README.assets/image-20210418182728614.png" alt="image-20210418182728614" style="zoom: 50%;" />
 
 Untuk tambahan silakan baca [CFGtoNormalForm](./HW/HW2106/CFGtoNormalForm.pdf).
+
+Ada beberapa steps selain yang utama:
+
+- Nonproductive Removal, artinya semua terminal yang tidak bisa menuju non terminal bisa dibuang.
+- Semua terminal yang tidak bisa diraih dari inital juga mesti dibuang.
+- Unit removal, semua rule A -> B, bisa diganti dengan A -> C, dengan B -> C benar
+- Epsilon Removal, semua rule A -> ε bisa dibuang dan semua B -> A
 
 ![HW2106](README.assets/HW2106.jpg)
