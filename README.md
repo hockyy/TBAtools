@@ -166,6 +166,7 @@ Cara bikin A<sup>R</sup>:
 - **PASTIKAN BENAR BENAR LENGKAP DFSM-NYA!** Semua karakter harus ada, semua transisi harus ada untuk semua karakter.
 - Accepting harus satu, kalau lebih dari satu finalnya bikin node baru.
 - Initial jadi accepting, accepting jadi initial
+- Reverse semua arah transisinya
 - Hasilnya bisa jadi NDFSM
 - Convert lagi ke DFSM bila perlu.
 
